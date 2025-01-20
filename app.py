@@ -195,4 +195,4 @@ def download(filename):
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False)  # Disable Flask auto-reloader
+    app.run(debug=True, use_reloader=False, port=8000)  # Disable Flask auto-reloader
