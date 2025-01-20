@@ -19,8 +19,9 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Path to the static base image
-BASE_IMAGE_PATH = os.path.join('static', 'base_image.jpg')
+# Path to the static base images
+BASE_IMAGE_PATH_1 = os.path.join('static', 'base_image_1.jpg')  # For the first app
+BASE_IMAGE_PATH_2 = os.path.join('static', 'base_image_2.jpg')  # For the second app
 
 def add_arabic_text_to_image(ax, text, x, y, font_path, font_size, text_color, letter_spacing=None, alpha=1.0, noise=False):
     """
@@ -74,7 +75,7 @@ def add_scanned_effects(image):
     Adds scanned effects like ink splashes, dirt, and paper texture to the image while keeping it colorful.
     """
     # Add paper texture (ensure the texture is in color)
-    paper_texture = Image.open("static/paper_texture.jpg").convert("RGB")  # Load a paper texture image in color
+    paper_texture = Image.open("static/paper_texture2.jpg").convert("RGB")  # Load a paper texture image in color
     paper_texture = paper_texture.resize(image.size)
     image = Image.blend(image.convert("RGB"), paper_texture, alpha=0.03)  # Blend the texture with the image
 
@@ -89,9 +90,38 @@ def add_scanned_effects(image):
 
     return image
 
-def generate_image(base_image_path, stamp_image_path, front_id_path, back_id_path, customer_name, central_name, date, phone_number):
+def generate_image_1(base_image_path, text_elements, output_path):
     """
-    Generates the final image with overlays and text.
+    Generates the first image with Arabic text overlaid.
+    """
+    image = Image.open(base_image_path)
+
+    # Create a figure and axis
+    fig, ax = plt.subplots()
+    ax.imshow(image)
+
+    # Add all text elements to the image
+    for element in text_elements:
+        ax = add_arabic_text_to_image(ax, **element)
+
+    # Hide axes
+    ax.axis("off")
+
+    # Save the image to a BytesIO object
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format='jpg', bbox_inches="tight", pad_inches=0, dpi=300)
+    img_buffer.seek(0)
+    plt.close('all')  # Close all figures to free up memory
+
+    # Save the final image
+    with open(output_path, 'wb') as f:
+        f.write(img_buffer.getvalue())
+
+    return output_path
+
+def generate_image_2(base_image_path, stamp_image_path, front_id_path, back_id_path, customer_name, central_name, date, phone_number):
+    """
+    Generates the second image with overlays and text.
     """
     base_image = Image.open(base_image_path).convert("RGBA")
 
@@ -105,18 +135,17 @@ def generate_image(base_image_path, stamp_image_path, front_id_path, back_id_pat
     base_image = overlay_image(base_image, back_id_path, (1400, 2500), (1000, 700))
 
     # Format the date: single-digit month and two spaces between day, month, and year
-    # Example: 20-01-2025 -> 20  1  2025
     day, month, year = date.split("-")
     formatted_date = f"{day}    {int(month)}    {year}"  # Convert month to int to remove leading zero
 
     # Define text elements
     text_elements = [
-        {"text": formatted_date, "x": 1960, "y": 900, "font_path": "fonts/Molhim.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": customer_name, "x": 1430, "y": 1360, "font_path": "fonts/Dima Font.ttf", "font_size": 7.5, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": central_name, "x": 1670, "y": 1500, "font_path": "fonts/Dima Font.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": phone_number, "x": 300, "y": 1360, "font_path": "fonts/Molhim.ttf", "font_size": 8.5, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": phone_number, "x": 1020, "y": 2160, "font_path": "fonts/Molhim.ttf", "font_size": 10, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": customer_name, "x": 170, "y": 2180, "font_path": "fonts/manual.otf", "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": formatted_date, "x": 1970, "y": 900, "font_path": "static/fonts/Molhim.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": customer_name, "x": 1430, "y": 1360, "font_path": "static/fonts/Dima Font.ttf", "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": central_name, "x": 1670, "y": 1500, "font_path": "static/fonts/Dima Font.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": phone_number, "x": 300, "y": 1360, "font_path": "static/fonts/Molhim.ttf", "font_size": 8.5, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": phone_number, "x": 1020, "y": 2160, "font_path": "static/fonts/Molhim.ttf", "font_size": 10, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": customer_name, "x": 170, "y": 2180, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", "font_size": 9, "text_color": "#140a72", "alpha": 1, "noise": False},
     ]
 
     # Create a figure and axis
@@ -140,7 +169,7 @@ def generate_image(base_image_path, stamp_image_path, front_id_path, back_id_pat
     final_image = Image.open(img_buffer)
 
     # Add scanned effects
-    final_image = add_scanned_effects(final_image)
+    # final_image = add_scanned_effects(final_image)
 
     # Save the final image to a new BytesIO object
     final_buffer = BytesIO()
@@ -153,17 +182,25 @@ def generate_image(base_image_path, stamp_image_path, front_id_path, back_id_pat
 def index():
     if request.method == 'POST':
         try:
-            # Get form data
+            # Get form data for both apps
+            customer_name = request.form['customer_name']
+            nationality = request.form['nationality']
+            national_id = request.form['national_id']
+            phone_num = request.form['phone_num']
+            landline = request.form['landline']
+            central = request.form['central']
+            quota = request.form['quota']
+            price = request.form['price']
+            sales_name = request.form['sales_name']
+            payment_frequency = request.form['payment_frequency']
+            date = request.form['date']
             stamp_image = request.files['stamp_image']
             front_id = request.files['front_id']
             back_id = request.files['back_id']
-            customer_name = request.form['customer_name']
-            central_name = request.form['central_name']
-            date = request.form['date']
-            phone_number = request.form['phone_number']
+            serial = request.form['serial']
 
             # Validate required fields
-            if not all([stamp_image, front_id, back_id, customer_name, central_name, date, phone_number]):
+            if not all([customer_name, nationality, national_id, phone_num, landline, central, quota, price, sales_name, payment_frequency, date, stamp_image, front_id, back_id]):
                 return "All fields are required!", 400
 
             # Save uploaded files
@@ -174,16 +211,71 @@ def index():
             stamp_image.save(stamp_image_path)
             front_id.save(front_id_path)
             back_id.save(back_id_path)
+            
+            day, month, year = date.split("-")
+            formatted_date = f"{day}    {int(month)}    {year}"  # Convert month to int to remove leading zero
+            # Generate the first image
+            text_elements_1 = [
+                {"text": serial, "x": 740, "y": 390, "font_path": "static/fonts/Arimo-VariableFont_wght.ttf", 
+                 "font_size": 6, "text_color": "#740022", "alpha": 1, "noise": True},
+                {"text": customer_name, "x": 550, "y": 550, "font_path": "static/fonts/Dima Font.ttf", 
+                 "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": customer_name, "x": 335, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
+                 "font_size": 4, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": customer_name, "x": 350, "y": 760, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
+                 "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": sales_name, "x": 200, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
+                 "font_size": 4, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": sales_name, "x": 180, "y": 755, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
+                 "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": nationality, "x": 790, "y": 590, "font_path": "static/fonts/Dima Font.ttf", 
+                 "font_size": 5.5, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": national_id, "x": 630, "y": 748, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 5.9, "text_color": "#140a72", "alpha": 1, "noise": True, "letter_spacing": 21},
+                {"text": phone_num, "x": 550, "y": 960, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": phone_num, "x": 710, "y": 1400, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": landline, "x": 890, "y": 975, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": landline, "x": 160, "y": 390, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 8.5, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": landline, "x": 715, "y": 1220, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": central, "x": 780, "y": 1350, "font_path": "static/fonts/Dima Font.ttf", 
+                 "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": quota, "x": 420, "y": 560, "font_path": "static/fonts/Caveat-Regular.ttf", 
+                 "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": price, "x": 320, "y": 560, "font_path": "static/fonts/Caveat-Regular.ttf", 
+                 "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": formatted_date, "x": 380, "y": 800, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
+                {"text": formatted_date, "x": 160, "y": 795, "font_path": "static/fonts/Molhim.ttf", 
+                 "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
+            ]
 
-            # Generate the final image using the static base image
-            img_buffer = generate_image(BASE_IMAGE_PATH, stamp_image_path, front_id_path, back_id_path, customer_name, central_name, date, phone_number)
+            # Add '/' based on payment frequency selection
+            if payment_frequency == "month":
+                text_elements_1.append({"text": "/", "x": 400, "y": 610, "font_path": "static/fonts/Dima Font.ttf", 
+                                     "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True})
+            elif payment_frequency == "6_months":
+                text_elements_1.append({"text": "/", "x": 335, "y": 610, "font_path": "static/fonts/Dima Font.ttf", 
+                                     "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True})
+            elif payment_frequency == "12_months":
+                text_elements_1.append({"text": "/", "x": 250, "y": 610, "font_path": "static/fonts/Dima Font.ttf", 
+                                     "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True})
 
-            # Save the generated image
-            output_path = os.path.join(app.config['UPLOAD_FOLDER'], 'result.jpg')
-            with open(output_path, 'wb') as f:
-                f.write(img_buffer.getvalue())
+            # Generate the first image
+            output_path_1 = os.path.join(app.config['UPLOAD_FOLDER'], 'output_1.jpg')
+            generate_image_1(BASE_IMAGE_PATH_1, text_elements_1, output_path_1)
 
-            return render_template('index.html', image_generated=True, image_path='uploads/result.jpg')
+            # Generate the second image
+            img_buffer_2 = generate_image_2(BASE_IMAGE_PATH_2, stamp_image_path, front_id_path, back_id_path, customer_name, central, date, phone_num)
+            output_path_2 = os.path.join(app.config['UPLOAD_FOLDER'], 'output_2.jpg')
+            with open(output_path_2, 'wb') as f:
+                f.write(img_buffer_2.getvalue())
+
+            return render_template('index.html', image_generated=True, image_path_1='uploads/output_1.jpg', image_path_2='uploads/output_2.jpg')
 
         except Exception as e:
             return f"An error occurred: {str(e)}", 500
