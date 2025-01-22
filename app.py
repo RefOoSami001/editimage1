@@ -142,7 +142,7 @@ def generate_image_2(base_image_path, stamp_image_path, front_id_path, back_id_p
     text_elements = [
         {"text": formatted_date, "x": 1970, "y": 900, "font_path": "static/fonts/Molhim.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
         {"text": customer_name, "x": 1430, "y": 1360, "font_path": "static/fonts/Dima Font.ttf", "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": False},
-        {"text": central_name, "x": 1670, "y": 1500, "font_path": "static/fonts/Dima Font.ttf", "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": False},
+        {"text": central_name, "x": 1520, "y": 1510, "font_path": "static/fonts/Dima Font.ttf", "font_size": 6.2, "text_color": "#140a72", "alpha": 1, "noise": False},
         {"text": phone_number, "x": 300, "y": 1360, "font_path": "static/fonts/Molhim.ttf", "font_size": 8.5, "text_color": "#140a72", "alpha": 1, "noise": False},
         {"text": phone_number, "x": 1020, "y": 2160, "font_path": "static/fonts/Molhim.ttf", "font_size": 10, "text_color": "#140a72", "alpha": 1, "noise": False},
         {"text": customer_name, "x": 170, "y": 2180, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", "font_size": 9, "text_color": "#140a72", "alpha": 1, "noise": False},
@@ -220,13 +220,13 @@ def index():
                  "font_size": 6, "text_color": "#740022", "alpha": 1, "noise": True},
                 {"text": customer_name, "x": 550, "y": 550, "font_path": "static/fonts/Dima Font.ttf", 
                  "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": customer_name, "x": 335, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
+                {"text": customer_name, "x": 325, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
                  "font_size": 4, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": customer_name, "x": 350, "y": 760, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
+                {"text": customer_name, "x": 340, "y": 760, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
                  "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": sales_name, "x": 200, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
+                {"text": sales_name, "x": 150, "y": 700, "font_path": "static/fonts/Dima Font.ttf", 
                  "font_size": 4, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": sales_name, "x": 180, "y": 755, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
+                {"text": sales_name, "x": 140, "y": 755, "font_path": "static/fonts/alfont_com_Digi-Maryam-Regular.ttf", 
                  "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
                 {"text": nationality, "x": 790, "y": 590, "font_path": "static/fonts/Dima Font.ttf", 
                  "font_size": 5.5, "text_color": "#140a72", "alpha": 1, "noise": True},
@@ -234,15 +234,15 @@ def index():
                  "font_size": 5.9, "text_color": "#140a72", "alpha": 1, "noise": True, "letter_spacing": 21},
                 {"text": phone_num, "x": 550, "y": 960, "font_path": "static/fonts/Molhim.ttf", 
                  "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": phone_num, "x": 710, "y": 1400, "font_path": "static/fonts/Molhim.ttf", 
+                {"text": phone_num, "x": 680, "y": 1400, "font_path": "static/fonts/Molhim.ttf", 
                  "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": landline, "x": 890, "y": 975, "font_path": "static/fonts/Molhim.ttf", 
+                {"text": landline, "x": 870, "y": 975, "font_path": "static/fonts/Molhim.ttf", 
                  "font_size": 5, "text_color": "#140a72", "alpha": 1, "noise": True},
                 {"text": landline, "x": 160, "y": 390, "font_path": "static/fonts/Molhim.ttf", 
                  "font_size": 8.5, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": landline, "x": 715, "y": 1220, "font_path": "static/fonts/Molhim.ttf", 
+                {"text": landline, "x": 690, "y": 1220, "font_path": "static/fonts/Molhim.ttf", 
                  "font_size": 7, "text_color": "#140a72", "alpha": 1, "noise": True},
-                {"text": central, "x": 780, "y": 1350, "font_path": "static/fonts/Dima Font.ttf", 
+                {"text": central, "x": 720, "y": 1350, "font_path": "static/fonts/Dima Font.ttf", 
                  "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
                 {"text": quota, "x": 420, "y": 560, "font_path": "static/fonts/Caveat-Regular.ttf", 
                  "font_size": 6, "text_color": "#140a72", "alpha": 1, "noise": True},
@@ -270,7 +270,7 @@ def index():
             generate_image_1(BASE_IMAGE_PATH_1, text_elements_1, output_path_1)
 
             # Generate the second image
-            img_buffer_2 = generate_image_2(BASE_IMAGE_PATH_2, stamp_image_path, front_id_path, back_id_path, customer_name, central, date, phone_num)
+            img_buffer_2 = generate_image_2(BASE_IMAGE_PATH_2, stamp_image_path, front_id_path, back_id_path, customer_name, central, date, landline)
             output_path_2 = os.path.join(app.config['UPLOAD_FOLDER'], 'output_2.jpg')
             with open(output_path_2, 'wb') as f:
                 f.write(img_buffer_2.getvalue())
